@@ -39,7 +39,6 @@ import TyCon
 -- others:
 import HsSyn            -- HsType
 import TcRnMonad        -- TcType, amongst others
-import TcHsSyn     ( checkForRepresentationPolymorphism )
 import TcEnv       ( tcGetInstEnvs )
 import FunDeps
 import InstEnv     ( ClsInst, lookupInstEnv, isOverlappable )
@@ -487,8 +486,6 @@ check_type _ _ _ (TyVarTy _) = return ()
 
 check_type env ctxt rank (FunTy arg_ty res_ty)
   = do  { check_type env ctxt arg_rank arg_ty
-        ; when (representationPolymorphismForbidden ctxt) $
-          checkForRepresentationPolymorphism empty arg_ty
         ; check_type env ctxt res_rank res_ty }
   where
     (arg_rank, res_rank) = funArgResRank rank
